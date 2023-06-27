@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Admin | Update User{% endblock %}
+{% block content %}
+</br>
+<h3 align="center">Update user: {{ data.username }}</h3>
+<div class="row justify-content-center">
+    <form action="/update/{{ data.user_id }}" method="POST" style="width: 500px;">
+        <div class="form-group">
+            <label for="username">Username</label>
+             <input type="text" class="form-control" id="username" name="username" value={{ data.username }} required />
+            <label for="first_name">Firstname</label>
+             <input type="text" class="form-control" id="first_name" name="first_name" value={{ data.first_name }} />
+            <label for="last_name">Lastname</label>
+             <input type="text" class="form-control" id="last_name" name="last_name" value={{ data.last_name }} />
+
+            <input type="hidden" name="current_user_type" value="{{ data.user_type }}">
+
+            <p>Select user type:</p>
+             <input type="radio" id="admin" name="user_type" value="1" {% if data.user_type == 1 %} checked {% else %}  {% endif %} disabled>
+             <label for="admin"> Admin</label><br>
+             <input type="radio" id="manager" name="user_type" value="2" {% if data.user_type == 2 %} checked {% else %}  {% endif %} disabled>
+             <label for="manager"> Manager</label><br>
+             <input type="radio" id="employee" name="user_type" value="3" {% if data.user_type == 3 %} checked {% else %}  {% endif %} disabled>
+             <label for="employee"> Employee</label><br>
+            <label for="password">Password</label>
+             <input type="password" class="form-control" id="password" name="password" value="" required />
+        </div>
+
+        <div class="form-group" id="card_id_container" style="display: none;">
+            <label for="card_id">Card ID</label>
+            <input type="text" class="form-control" id="card_id" name="card_id" placeholder="Card ID" value={{ card_id }} />
+        </div>
+
+        <button type="submit" class="btn btn-primary" >Update</button>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        var defaultUserType = $('input[name="user_type"]:checked').val();
+        
+        if (defaultUserType === '3') { // If default value is "Employee"
+            $('#card_id_container').show();
+        }
+    
+        $('input[name="user_type"]').on('change', function() {
+            if ($(this).val() === '3') { // If "Employee" option is selected
+                $('#card_id_container').show();
+            } else {
+                $('#card_id_container').hide();
+            }
+        });
+    });
+    </script>
+
+{% endblock %}

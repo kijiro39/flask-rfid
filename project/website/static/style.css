@@ -1,0 +1,113 @@
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: inherit; 
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #1C2541; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #6FFFE9; 
+}
+
+body {
+    background-color: #D6EDFF;
+}
+
+.navbar {
+    background-color: #3F51B5;
+}
+
+.navbar-nav .nav-link {
+    color: #FFFFFF;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #FFEB3B;
+}
+
+.card-body{
+    background-color: #8B95C9;
+}
+
+.card-body p i h2 h3{
+    font-size: 20px;
+    margin-right: 5px;
+    color: #0B132B;
+}
+
+.card h3{
+    color: #0B132B;
+}
+
+.card-body p {
+    font-size: 25px;
+    font-weight: 500;
+    color: #0B132B;
+}
+.dashboard .row{
+    background-color: #8B95C9;
+    border-radius: 10px;
+}
+
+.col-md-6 form{
+    border-style: solid;
+}
+
+.form{
+  background-color: #7EBCE6;
+  padding: 20px;
+  border: solid;
+  border-width: medium;
+  border-radius: 45px;
+}
+
+/* Styling for the profile card */
+.profile-card {
+    background-color: inherit;
+    border: none;
+    padding: 0px;
+  }
+  
+  /* Styling for the user count card */
+  .user-count-card {
+    background-color: inherit;
+    border: none;
+    padding: 0px;
+  }
+  
+  /* Styling for the date & time card */
+  .date-time-card {
+    background-color: inherit;
+    border: none;
+    padding: 0px;
+  }
+  
+  /* Additional custom styles */
+  /* Add your own CSS rules here */
+  .profile-container {
+    background-color: #f8f9fa; /* Set background color */
+    border-radius: 10px; /* Rounded corners */
+    padding: 20px; /* Add some padding */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Add shadow */
+  }
+  
+  .profile-container h2 {
+    color: #333; /* Set heading text color */
+    font-size: 24px; /* Set heading font size */
+    margin-bottom: 20px; /* Add bottom margin to the heading */
+  }
+  
+  .profile-container p {
+    color: #777; /* Set paragraph text color */
+    font-size: 16px; /* Set paragraph font size */
+    margin-bottom: 10px; /* Add bottom margin to paragraphs */
+  }  

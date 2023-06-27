@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <link
+          rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+          crossorigin="anonymous"
+        />
+        <link
+          rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+          crossorigin="anonymous"
+        />
+        <link 
+          rel="stylesheet" 
+          href="{{ url_for('static', filename='style.css') }}"
+        />
+        <script 
+          src="https://kit.fontawesome.com/7bf25e6af8.js" 
+          crossorigin="anonymous"
+        ></script>
+
+        <title>{% block title %}Home{% endblock %}</title>
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbar">
+              <div class="navbar-nav">
+                
+                {% if user.is_authenticated%}
+                {% if user.user_type == 1 %}
+                  <a class="nav-item nav-link {% if request.path == '/admin_home' %}active{% endif %}" id="admin_home" href="/admin_home">Admin Dashboard</a>
+                  <a class="nav-item nav-link {% if request.path == '/add_user' %}active{% endif %}" id="add_user" href="/add_user">Add User</a>
+                  <a class="nav-item nav-link {% if request.path == '/view_user' %}active{% endif %}" id="view_user" href="/view_user">Manage User</a>
+                  <a class="nav-item nav-link {% if request.path == '/admin_viewrec' %}active{% endif %}" id="admin_viewrec" href="/admin_viewrec">Attendance Record</a>
+                  <a class="nav-item nav-link {% if request.path == '/logout' %}active{% endif %}" id="logout" href="/logout" onclick="return logoutConfirmation()">Logout</a> 
+                {% elif user.user_type == 2 %}
+                  <a class="nav-item nav-link {% if request.path == '/manager_home' %}active{% endif %}" id="manager_home" href="/manager_home">Manager Dashboard</a>
+                  <a class="nav-item nav-link {% if request.path == '/view_emp' %}active{% endif %}" id="emp_list" href="/view_emp">Employee List</a>
+                  <a class="nav-item nav-link {% if request.path == '/manager_viewrec' %}active{% endif %}" id="manager_viewrec" href="/manager_viewrec">Attendance Record</a>
+                  <a class="nav-item nav-link {% if request.path == '/logout' %}active{% endif %}" id="logout" href="/logout" onclick="return logoutConfirmation()">Logout</a>
+                {% elif user.user_type == 3 %}
+                  <a class="nav-item nav-link {% if request.path == '/employee_home' %}active{% endif %}" id="employee_home" href="/employee_home">Employee Dashboard</a>
+                  <a class="nav-item nav-link {% if request.path == '/employee_viewrec' %}active{% endif %}" id="employee_viewrec" href="/employee_viewrec">Attendance Record</a>
+                  <a class="nav-item nav-link {% if request.path == '/logout' %}active{% endif %}" id="logout" href="/logout" onclick="return logoutConfirmation()">Logout</a>
+                {% else %}
+                <a class="nav-item nav-link {% if request.path == '/login' %}active{% endif %}" id="login" href="/">Login</a>
+                <a class="nav-item nav-link {% if request.path == '/scan_attendance' %}active{% endif %}" id="scn" href="/scan_attendance">Scan Attendance</a>
+                {% endif %}
+                {% else %}
+                  {% if '127.0.0.1:5000' in request.host %}
+                    <a class="nav-item nav-link {% if request.path == '/scan_attendance' %}active{% endif %}" href="/scan_attendance">Scan Attendance</a>
+                  {% else %}
+                    <a class="nav-item nav-link {% if request.path == '/login' %}active{% endif %}" id="login" href="/login">Login</a>
+                  {% endif %}
+                {% endif %}
+                
+              </div>
+            </div>
+        </nav>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              {% if category == 'error' %}
+                <div id="error-flash-message" class="alert alert-danger alert-dismissible fade show flash-message" role="alert">
+                  {{ message }}
+                </div>
+              {% else %}
+                <div id="success-flash-message" class="alert alert-success alert-dismissible fade show flash-message" role="alert">
+                  {{ message }}
+                </div>
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+<script>
+  // Select the flash message elements by their id
+  var errorFlashMessage = document.getElementById('error-flash-message');
+  var successFlashMessage = document.getElementById('success-flash-message');
+
+  // Remove the flash message elements after 5 seconds
+  if (errorFlashMessage) {
+    setTimeout(function() {
+      errorFlashMessage.remove();
+    }, 5000); // Adjust the duration (in milliseconds) as needed
+  }
+  
+  if (successFlashMessage) {
+    setTimeout(function() {
+      successFlashMessage.remove();
+    }, 5000); // Adjust the duration (in milliseconds) as needed
+  }
+</script>
+
+        <div class="container">
+            {% block content %}
+            {% endblock %}
+        </div>
+        <script
+            src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"
+        ></script>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"
+        ></script>
+        <script
+            src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"
+        ></script>
+        <script
+            type="text/javascript"
+            src="{{ url_for('static', filename='clock.js') }}"
+        ></script>
+
+        <script>
+          function logoutConfirmation() {
+            if (confirm('Are you sure you want to log out?')) {
+              window.location.href = "/logout";
+            }
+            return false;
+          }
+        </script>
+    </body>
+</html>

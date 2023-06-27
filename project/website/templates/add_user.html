@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Admin | Add User{% endblock %}
+{% block content %}
+</br>
+<h3 align="center">Add New User</h3>
+</br>
+<div class="row justify-content-center">
+    <form class="form" action="/add_user" method="POST">
+        <div class="form-group" style="width: 500px;">
+            <label for="username">Username</label>
+             <input type="text" class="form-control" id="username" name="username" placeholder="Username" required />
+            <label for="first_name">Firstname</label>
+             <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Firstname" />
+            <label for="last_name">Lastname</label>
+             <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Lastname" />
+            <p>Select user type:</p>
+             <input type="radio" id="admin" name="user_type" value="1"> 
+             <label for="admin"> Admin</label><br>
+             <input type="radio" id="manager" name="user_type" value="2"> 
+             <label for="manager"> Manager</label><br>
+             <input type="radio" id="employee" name="user_type" value="3"> 
+             <label for="employee"> Employee</label><br>
+            <label for="password">Password</label>
+             <input type="password" class="form-control" id="password" name="password" placeholder="Password" required />
+        </div>
+        <div class="form-group" id="card_id_container" style="display: none;">
+            <label for="card_id">Card ID</label>
+            <input type="text" class="form-control" id="card_id" name="card_id" placeholder="Card ID" />
+        </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+</br>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('input[name="user_type"]').on('change', function() {
+        if ($(this).val() === '3') { // If "Employee" option is selected
+            $('#card_id_container').show();
+        } else {
+            $('#card_id_container').hide();
+        }
+    });
+});
+</script>
+
+{% endblock %}

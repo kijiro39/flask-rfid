@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <link
+          rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+          crossorigin="anonymous"
+        />
+        <link
+          rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+          crossorigin="anonymous"
+        />
+        <link 
+          rel="stylesheet" 
+          href="{{ url_for('static', filename='style.css') }}"
+        />
+        <script 
+          src="https://kit.fontawesome.com/7bf25e6af8.js" 
+          crossorigin="anonymous"
+        ></script>
+
+        <title>{% block title %}Scan Attendance{% endblock %}</title>
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbar">
+              <div class="navbar-nav">
+                    <a class="nav-item nav-link {% if request.path == '/scan_attendance' %}active{% endif %}" href="/scan_attendance">Scan Attendance</a> 
+              </div>
+            </div>
+        </nav>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              {% if category == 'error' %}
+                <div id="error-flash-message" class="alert alert-danger alert-dismissible fade show flash-message" role="alert">
+                  {{ message }}
+                </div>
+              {% else %}
+                <div id="success-flash-message" class="alert alert-success alert-dismissible fade show flash-message" role="alert">
+                  {{ message }}
+                </div>
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <script>
+            // Select the flash message elements by their id
+            var errorFlashMessage = document.getElementById('error-flash-message');
+            var successFlashMessage = document.getElementById('success-flash-message');
+
+            // Remove the flash message elements after 5 seconds
+            if (errorFlashMessage) {
+                setTimeout(function() {
+                    errorFlashMessage.remove();
+                }, 5000); // Adjust the duration (in milliseconds) as needed
+            }
+  
+            if (successFlashMessage) {
+                setTimeout(function() {
+                    successFlashMessage.remove();
+                }, 5000); // Adjust the duration (in milliseconds) as needed
+            }
+        </script>
+
+
+        <div class="container">
+            <div class="card attendance-card">
+                <div class="card-body">
+                  <h5 class="card-title"><i class="fas fa-user"></i> Attendance Recorded</h5>
+                  <p class="card-text">Name: {{ user.first_name }} {{ user.last_name }}</p>
+                  <p class="card-text">User ID: {{ user.user_id }}</p>
+                  <p class="card-text">Clock In: {{ attendance.clock_in }}</p>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // Auto redirect after 3 seconds
+            setTimeout(function() {
+              window.location.href = '/scan_attendance';
+            }, 3000);
+        </script>
+
+        <script
+            src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"
+        ></script>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"
+        ></script>
+        <script
+            src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"
+        ></script>
+        <script
+            type="text/javascript"
+            src="{{ url_for('static', filename='clock.js') }}"
+        ></script>
+    </body>
+</html>
+

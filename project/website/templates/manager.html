@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Manager Homepage{% endblock %}
+{% block content %}
+</br>
+<h1 align="center">Welcome to Manager Homepage</h1>  
+</br>
+<div class="dashboard">
+    <div class="row">
+        <div class="col-md-3" style="padding: 60px 0 0;">
+            <div class="text-center" style="">
+                <i class="fa-solid fa-user fa-2xl"></i>
+            </div>
+            <div class="card profile-card text-center">
+                <div class="card-body">
+                    <form action="/manager_edit" method="POST">
+                        <button type="submit" class="btn btn-outline-dark"><i class="fa-solid fa-pen-nib"></i> <b>Edit Profile</b></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-7" style="padding: 10px 0 0;">
+            <!-- Profile section -->
+            <div class="card profile-card">
+                <div class="card-body">
+                    <!-- Profile information -->
+                    <h2><i class="fa-regular fa-id-card"></i> <b>{{ user.first_name }} {{ user.last_name }}</b></h2>
+                    <h3>Username: {{ user.username }}</h3>
+                    <h3>Employee ID: {{ user.user_id }}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+        <!-- User count section -->
+            <div class="card user-count-card">
+                <div class="card-body">
+                    <!-- User count information -->
+                    <h3 class="card-text"> Number of Employees: {{ count }} </h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <!-- Date & Time section -->
+            <div class="card date-time-card">
+                <div class="card-body">
+                    <!-- Date & time information -->
+                    <h3 class="card-text">Current Time: <span id="clock"></span></h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
