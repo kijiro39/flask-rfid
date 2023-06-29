@@ -16,7 +16,8 @@ n = 'projectFYP'
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'bzdfbsdfbwbreb'
-    app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://admin:v1GxmS8FFZ0mag8WKiF2uAkLKAC3qiXq@dpg-cie7jt59aq0ce3bav0rg-a.singapore-postgres.render.com/projectfyp'
+    app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://usf41rbx1y69zzmi:BHIusOQlaUfU5EOIOj3Y@bqrweb51gvmmoujfaiar-mysql.services.clever-cloud.com:3306/bqrweb51gvmmoujfaiar'
+    # f'postgresql://admin:v1GxmS8FFZ0mag8WKiF2uAkLKAC3qiXq@dpg-cie7jt59aq0ce3bav0rg-a.singapore-postgres.render.com/projectfyp'
     # f'mysql+pymysql://root:@localhost:3306/projectfyp'
     app.config['MESSAGE_FLASHING_OPTIONS'] = {'duration': 5}
     db.init_app(app)
