@@ -347,8 +347,8 @@ def check_attendance():
                 db.session.commit()
             
         return redirect(url_for('admin.admin_viewrec'))
-             
-    return render_template('admin_viewrec.html', user=current_user)
+    else:     
+        return render_template('admin_viewrec.html', user=current_user)
 
 def find_missing_attendance(current_date):
     start_datetime = datetime.combine(current_date, datetime.min.time())
