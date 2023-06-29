@@ -102,6 +102,11 @@ def edit_profile():
 @admin.route('/add_user', methods=['GET', 'POST'])
 @login_required
 def add_user():
+    current_date = date.today()  # Current date
+    current_time = datetime.now().time()  # Current time
+
+    # Create a new datetime object with the current date and time
+    current_datetime = datetime.combine(current_date, current_time)
     if request.method == 'POST':
         username = request.form.get('username')
         first_name = request.form.get('first_name')
@@ -131,6 +136,7 @@ def add_user():
                             last_name=last_name, 
                             user_type=user_type, 
                             password=generate_password_hash(password, method='sha256'),
+                            date_added=current_datetime
                             )
             db.session.add(new_user)
             db.session.commit()
