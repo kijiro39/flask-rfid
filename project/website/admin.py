@@ -155,7 +155,7 @@ def display_user():
     for user in users:
         if user.date_added:
             date_added = str(user.date_added)
-            user.date_added = datetime.strptime(date_added, "%Y-%m-%d").strftime("%d-%m-%Y")
+            user.date_added = datetime.strptime(date_added, "%Y-%m-%d %H:%M:%S").strftime("%d-%m-%Y")
     
     return render_template("user_list.html", list=users, user=current_user)
 
