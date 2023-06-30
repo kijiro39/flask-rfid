@@ -62,7 +62,7 @@ def scan_attendance():
             db.session.commit()
 
             flash("Attendance recorded successfully", "success")
-            return render_template("display_scan.html", user=user, attendance=attendance)
+            return render_template("display_scan.html", user=user, attendance=attendance, action=action)
         else:
             flash("Invalid card ID", "error")
 

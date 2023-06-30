@@ -79,7 +79,11 @@
                   <h5 class="card-title"><i class="fas fa-user"></i> Attendance Recorded</h5>
                   <p class="card-text">Name: {{ user.first_name }} {{ user.last_name }}</p>
                   <p class="card-text">User ID: {{ user.user_id }}</p>
-                  <p class="card-text">Clock In: {{ attendance.clock_in }}</p>
+                  {% if action == "clock_in" %}
+                    <p class="card-text">Clock In: {{ attendance.clock_in }}</p>
+                  {% elif action == "clock_out" %}
+                    <p class="card-text">Clock Out: {{ attendance.clock_out }}</p>
+                  {% endif %}
                 </div>
             </div>
         </div>

@@ -284,14 +284,17 @@ def define_status(clock_in, clock_out):
     status = ''
     start_shift = time(18, 0)
     end_shift = time(23, 0)
+    end_scan = time(23, 30)
     
     if clock_in and clock_out:
         clock_in = clock_in.time()
         clock_out = clock_out.time()
-        if clock_in > start_shift and clock_out > end_shift:
+        if clock_in > start_shift and clock_out >= end_scan:
             status = 'Absent'
-        elif clock_in > start_shift and clock_out < end_shift:
+        elif clock_in > start_shift and clock_out < end_scan:
             status = 'Late'
+        elif clock_in < start_shift and clock_out < end_shift:
+            status = 'Excuse'
         else:
             status = 'Present'
     elif clock_in and not clock_out:

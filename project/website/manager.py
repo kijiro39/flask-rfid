@@ -158,7 +158,7 @@ def find_suspicious_records(attendance_records):
         for j in range(i+1, len(attendance_records)):
             if attendance_records[i].card.card_id != attendance_records[j].card.card_id:
                 time_diff = abs(attendance_records[i].clock_in - attendance_records[j].clock_in)
-                if time_diff < timedelta(seconds=60):
+                if time_diff < timedelta(milliseconds=6000):
                     counter += 1
                     if counter == 3:
                         suspicious_records.append({'index': j})  # Set 'Suspicious' status on the third occurrence
