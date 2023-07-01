@@ -275,7 +275,8 @@ def admin_viewrec():
             'clock_out': clock_out_time.strftime('%H:%M:%S'),
             'status': status
         })
-        
+    # Query to get all attendance records in default order
+    default_records = Attendance.query.join(Card).join(User).all()
     # Check for suspicious attendance records
     suspicious_records = find_suspicious_records(attendance_records)
 
@@ -327,6 +328,32 @@ def find_suspicious_records(attendance_records):
                     counter = 0
     
     return suspicious_records
+
+# def find_suspicious_records(attendance_records):
+#     suspicious_records = []
+#     counter = 0  # Counter to keep track of repeated occurrences
+#     prev_card_id = None
+
+#     for record in attendance_records:
+#         if prev_card_id is not None and record.card.card_id != prev_card_id:
+#             if counter >= 2:
+#                 suspicious_records.append(prev_card_id)  # Add previous card ID to suspicious_records
+#                 suspicious_records.append(record.card.card_id)  # Add current card ID to suspicious_records
+#             counter = 0
+#         else:
+#             if prev_card_id is not None:
+#                 time_diff = (record.clock_in - attendance_records[counter - 1].clock_in).total_seconds()
+#                 if time_diff < 60:
+#                     counter += 1
+#                 else:
+#                     counter = 0
+#         prev_card_id = record.card.card_id
+
+#     if counter >= 2:
+#         suspicious_records.append(prev_card_id)  # Add the last card ID to suspicious_records
+    
+#     return suspicious_records
+
 
 @admin.route('/update_record', methods=['POST'])
 def check_attendance():
