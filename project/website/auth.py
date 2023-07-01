@@ -3,8 +3,8 @@ from .models import User, Card, Attendance
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 from flask_login import login_user, login_required, logout_user, current_user
-from datetime import datetime, time
-from sqlalchemy import desc
+from datetime import datetime, time, date
+from sqlalchemy import desc, func
 
 auth = Blueprint('auth', __name__)
 
@@ -43,6 +43,11 @@ def logout():
 def scan_attendance():
     logout_user()
     
+    current_date = date.today()  # Current date
+    current_time = datetime.now().time()  # Current time
+    # Create a new datetime object with the current date and time
+    current_datetime = datetime.combine(current_date, current_time)
+    
     if request.method == 'POST':
         card_id = request.form.get('card_id')
         
@@ -51,13 +56,21 @@ def scan_attendance():
 
         if user:
             current_time = datetime.now()
-
-            if action == "clock_in":
+            scan = Attendance.query.filter(
+                Attendance.card_id == card_id,
+                func.date(Attendance.clock_in) == current_date,
+                Attendance.clock_out.isnot(None)
+            ).first()
+            
+            if scan: 
+                flash("Maximum scans per day reached for this card ID", "error")
+                return redirect(url_for('auth.scan_attendance'))
+            elif action == "clock_in":
                 attendance = Attendance(card_id=card_id, clock_in=current_time)
             else:
                 attendance = Attendance.query.filter_by(card_id=card_id).order_by(desc(Attendance.attendance_id)).first()
                 attendance.clock_out = current_time
-
+                           
             db.session.add(attendance)
             db.session.commit()
 
@@ -81,30 +94,11 @@ def check_clock_action(card_id):
     
     return "clock_in"
 
-def check_attendance():
-    # Get the current date and time
-    current_date = datetime.now().date()
-    current_time = datetime.now().time()
+def check_scan_count(clock_in, clock_out):
+    count = 0
+    if clock_in and clock_out:
+        count = 2
+    else:
+        count = 1
 
-    # Check if it's a working day (excluding Friday)
-    if current_date.weekday() != 4:  # Assuming Monday is 0 and Sunday is 6
-        # Get the shift start and end times
-        shift_start_time = datetime.combine(current_date, time(18, 0))
-        shift_end_time = datetime.combine(current_date, time(23, 0))
-
-        # Get the employees who started working the previous day
-        employees = User.query.join(Card).filter(User.user_type == 3, Card.card_id.isnot(None)).all()
-
-        for employee in employees:
-            # Check if the employee's shift has ended
-            if current_time >= shift_end_time.time():
-                # Check if the employee has already scanned their attendance
-                attendance = Attendance.query.filter_by(user_id=employee.user_id, date=current_date).first()
-                if not attendance:
-                    # Set the attendance status as 'Absent' if not scanned
-                    attendance = Attendance(user_id=employee.user_id, 
-                                            clock_in=current_time,
-                                            clock_out=current_time
-                                            )
-                    db.session.add(attendance)
-                    db.session.commit()
+    return count

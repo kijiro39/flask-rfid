@@ -7,11 +7,11 @@
     <form action="/update/{{ data.user_id }}" method="POST" style="width: 500px;">
         <div class="form-group">
             <label for="username">Username</label>
-             <input type="text" class="form-control" id="username" name="username" value={{ data.username }} required />
+             <input type="text" class="form-control" id="username" name="username" value="{{ data.username }}" required />
             <label for="first_name">Firstname</label>
-             <input type="text" class="form-control" id="first_name" name="first_name" value={{ data.first_name }} />
+             <input type="text" class="form-control" id="first_name" name="first_name" value="{{ data.first_name }}" />
             <label for="last_name">Lastname</label>
-             <input type="text" class="form-control" id="last_name" name="last_name" value={{ data.last_name }} />
+             <input type="text" class="form-control" id="last_name" name="last_name" value="{{ data.last_name }}" />
 
             <input type="hidden" name="current_user_type" value="{{ data.user_type }}">
 
@@ -28,7 +28,7 @@
 
         <div class="form-group" id="card_id_container" style="display: none;">
             <label for="card_id">Card ID</label>
-            <input type="text" class="form-control" id="card_id" name="card_id" placeholder="Card ID" value={{ card_id }} />
+            <input type="text" class="form-control" id="card_id" name="card_id" placeholder="Card ID" value="{{ card_id }}" />
         </div>
 
         <button type="submit" class="btn btn-primary" >Update</button>
