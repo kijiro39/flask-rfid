@@ -275,8 +275,7 @@ def admin_viewrec():
             'clock_out': clock_out_time.strftime('%H:%M:%S'),
             'status': status
         })
-    # Query to get all attendance records in default order
-    default_records = Attendance.query.join(Card).join(User).all()
+        
     # Check for suspicious attendance records
     suspicious_records = find_suspicious_records(attendance_records)
 
