@@ -43,7 +43,10 @@ def edit_profile():
         
         data = User.query.filter_by(user_id=current_user.user_id).first()
         
-        if upd_password == upd_confirm_password:
+        if User.query.filter_by(username=upd_username).first() and upd_username != data.username:
+            flash('Username already taken. Try another.', category='error')
+            return render_template("edit_profile.html", user=current_user, data=data)
+        elif upd_password == upd_confirm_password:
             valid_password = validate_password(upd_password)
             if valid_password is False:
                 flash('Password must have least 8 characters, consists of at least 1 uppercase letter, 1 lowercase letter, 1 symbol, and 1 number', category="error")

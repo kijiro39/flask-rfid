@@ -73,8 +73,8 @@ def edit_profile():
         upd_confirm_password = request.form.get('confirm_password')
         
         data = User.query.filter_by(user_id=current_user.user_id).first()
-        
-        if User.query.filter_by(username=upd_username).first():
+                
+        if User.query.filter_by(username=upd_username).first() and upd_username != data.username:
             flash('Username already taken. Try another.', category='error')
             return render_template("edit_profile.html", user=current_user, data=data)
         elif upd_password == upd_confirm_password:
@@ -247,6 +247,7 @@ def example_route():
 @login_required
 def admin_viewrec():
     attendance_data = []
+    current_day = date.today()
 
     # Retrieve the attendance records and associated user information
     attendance_records = Attendance.query.join(Card).join(User).order_by(desc(Attendance.clock_in)).all()
@@ -254,7 +255,12 @@ def admin_viewrec():
     # Extract the required information from the records
     for record in attendance_records:
         clock_in_time = record.clock_in
-        clock_out_time = record.clock_out
+        if record.clock_out:
+            clock_out_time = record.clock_out
+        else:
+            null_clock_out = time(0, 0, 0)
+            record.clock_out = datetime.combine(current_day, null_clock_out)
+            clock_out_time = record.clock_out
         
         # Call the define_status function to determine the initial status
         status = define_status(clock_in_time, clock_out_time)
@@ -269,7 +275,8 @@ def admin_viewrec():
             'clock_out': clock_out_time.strftime('%H:%M:%S'),
             'status': status
         })
-        
+    # Query to get all attendance records in default order
+    default_records = Attendance.query.join(Card).join(User).all()
     # Check for suspicious attendance records
     suspicious_records = find_suspicious_records(attendance_records)
 
@@ -285,19 +292,22 @@ def define_status(clock_in, clock_out):
     start_shift = time(18, 0)
     end_shift = time(23, 0)
     end_scan = time(23, 30)
+    null_val = time(0, 0, 0)
     
     if clock_in and clock_out:
         clock_in = clock_in.time()
         clock_out = clock_out.time()
         if clock_in > start_shift and clock_out >= end_scan:
             status = 'Absent'
+        elif clock_in and clock_out == null_val:
+            status = 'Working'
         elif clock_in > start_shift and clock_out < end_scan:
             status = 'Late'
         elif clock_in < start_shift and clock_out < end_shift:
             status = 'Excuse'
         else:
             status = 'Present'
-    elif clock_in and not clock_out:
+    elif clock_in and clock_out == null_val:
         status = 'Working'
     return status
 
@@ -313,6 +323,7 @@ def find_suspicious_records(attendance_records):
                     counter += 1
                     if counter == 3:
                         suspicious_records.append({'index': j})  # Set 'Suspicious' status on the third occurrence
+                        # counter = 0
                 else:
                     counter = 0
     
@@ -325,8 +336,11 @@ def check_attendance():
 
     # Create a new datetime object with the current date and time
     current_datetime = datetime.combine(current_date, current_time)
+    
+    if current_date.weekday() == 4:
+        return redirect(url_for('admin.admin_viewrec'))
     # Check if it's a working day (excluding Friday)
-    if current_date.weekday() != 4:  # Assuming Monday is 0 and Sunday is 6
+    elif current_date.weekday() != 4:  # Assuming Monday is 0 and Sunday is 6
         # Get the shift start and end times
         
         shift_start_time = datetime.combine(current_date, time(18, 0))

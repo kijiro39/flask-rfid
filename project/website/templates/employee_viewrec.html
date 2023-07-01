@@ -5,11 +5,15 @@
 <h3 align="center">Attendance Records</h3>
 </br>
 
-<div class="profile">
-    <p>Name: {{ user.first_name }} {{ user.last_name }}</p>
-    <p>User ID: {{ user.user_id }}</p>
-    <p>Card ID: {{ card_id }}</p>
-<div>
+<div class="card profile-card">
+    <div class="card-body">
+        <!-- Profile information -->
+        <h2><i class="fa-regular fa-id-card"></i> <b>{{ user.first_name }} {{ user.last_name }}</b></h2>
+        <h3>Username: {{ user.username }}</h3>
+        <h3>Employee ID: {{ user.user_id }}</h3>
+        <h3>Card ID: {{ user.card_ref.card_id }}</h3>
+    </div>
+</div>
 
 <div class="form-group d-flex ml-auto" style="width: 300px;">
     <label for="month-select">Select Month:</label>

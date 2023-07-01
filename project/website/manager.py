@@ -49,7 +49,10 @@ def edit_profile():
         
         data = User.query.filter_by(user_id=current_user.user_id).first()
         
-        if upd_password == upd_confirm_password:
+        if User.query.filter_by(username=upd_username).first() and upd_username != data.username:
+            flash('Username already taken. Try another.', category='error')
+            return render_template("edit_profile.html", user=current_user, data=data)
+        elif upd_password == upd_confirm_password:
             valid_password = validate_password(upd_password)
             if valid_password is False:
                 flash('Password must have least 8 characters, consists of at least 1 uppercase letter, 1 lowercase letter, 1 symbol, and 1 number', category="error")
@@ -158,10 +161,11 @@ def find_suspicious_records(attendance_records):
         for j in range(i+1, len(attendance_records)):
             if attendance_records[i].card.card_id != attendance_records[j].card.card_id:
                 time_diff = abs(attendance_records[i].clock_in - attendance_records[j].clock_in)
-                if time_diff < timedelta(milliseconds=6000):
+                if time_diff < timedelta(seconds=60):
                     counter += 1
                     if counter == 3:
                         suspicious_records.append({'index': j})  # Set 'Suspicious' status on the third occurrence
+                        # counter = 0
                 else:
                     counter = 0
     
